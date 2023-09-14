@@ -1,5 +1,5 @@
-n=input()
-list1=list(map(int,input().split())) #리스트 공백기준 입력
-maxi=max(list1) #최대값 구하기
-sum=sum(list1)
-print(sum*100/maxi/int(n))
+n=int(input())
+lst1=list(map(int,input().split())) 
+maxval=max(lst1)
+sumval=sum(lst1)
+print(sumval/maxval*100/n)
