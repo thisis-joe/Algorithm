@@ -1,54 +1,35 @@
-import java.util.*;
-
 class Solution {
     public int solution(int[][] board) {
-        int boardLen = board.length;
-        int boardSize = (int)Math.pow(boardLen, 2);
-        int dangerZoneSize = 0;
+        int n = board.length;
+        boolean[][] dangerZone = new boolean[n][n];  // 위험 지역을 저장할 배열
+        int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};  // 8방향 이동 (좌상, 상, 우상, 좌, 우, 좌하, 하, 우하)
+        int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
 
-        for (int row = 0; row < boardLen; row++) {
-            for (int col = 0; col < boardLen; col++) {
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
                 if (board[row][col] == 1) {
-                    dangerZoneSize++;
-                    // 좌우상하
-                    if (row - 1 >= 0 && board[row - 1][col] != 1 && board[row - 1][col] != 2) {
-                        dangerZoneSize++;
-                        board[row - 1][col] = 2;
-                    }
-                    if (row + 1 < boardLen && board[row + 1][col] != 1 && board[row + 1][col] != 2) {
-                        dangerZoneSize++;
-                        board[row + 1][col] = 2;
-                    }
-                    if (col + 1 < boardLen && board[row][col + 1] != 1 && board[row][col + 1] != 2) {
-                        dangerZoneSize++;
-                        board[row][col + 1] = 2;
-                    }
-                    if (col - 1 >= 0 && board[row][col - 1] != 1 && board[row][col - 1] != 2) {
-                        dangerZoneSize++;
-                        board[row][col - 1] = 2;
-                    }
+                    for (int dir = 0; dir < 8; dir++) {
+                        int newRow = row + dx[dir];
+                        int newCol = col + dy[dir];
 
-                    // 대각선 좌상 우상 좌하 우하
-                    if (row - 1 >= 0 && col - 1 >= 0 && board[row - 1][col - 1] != 1 && board[row - 1][col - 1] != 2) {
-                        dangerZoneSize++;
-                        board[row - 1][col - 1] = 2;
+                        if (newRow >= 0 && newRow < n && newCol >= 0 && newCol < n) {
+                            dangerZone[newRow][newCol] = true;
+                        }
                     }
-                    if (row + 1 < boardLen && col - 1 >= 0 && board[row + 1][col - 1] != 1 && board[row + 1][col - 1] != 2) {
-                        dangerZoneSize++;
-                        board[row + 1][col - 1] = 2;
-                    }
-                    if (row - 1 >= 0 && col + 1 < boardLen && board[row - 1][col + 1] != 1 && board[row - 1][col + 1] != 2) {
-                        dangerZoneSize++;
-                        board[row - 1][col + 1] = 2;
-                    }
-                    if (row + 1 < boardLen && col + 1 < boardLen && board[row + 1][col + 1] != 1 && board[row + 1][col + 1] != 2) {
-                        dangerZoneSize++;
-                        board[row + 1][col + 1] = 2;
-                    }
+                    dangerZone[row][col] = true;
                 }
             }
         }
 
-        return boardSize - dangerZoneSize;
+        int safeCount = 0;
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                if (!dangerZone[row][col]) {
+                    safeCount++;
+                }
+            }
+        }
+
+        return safeCount;
     }
 }
