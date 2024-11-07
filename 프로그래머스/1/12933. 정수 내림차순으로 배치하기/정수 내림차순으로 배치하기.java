@@ -1,5 +1,6 @@
 
-import java.util.stream.Collectors;
+import java.util.stream.*;
+import java.util.*;
 
 class Solution {
     public long solution(long n) {
@@ -7,7 +8,7 @@ class Solution {
         String sortedStr = Long.toString(n).chars()
             // 2. 각 문자를 역순으로 정렬
             .mapToObj(c -> (char) c) 
-            .sorted((a, b) -> b - a)  // 내림차순 정렬
+            .sorted(Comparator.reverseOrder())  // 내림차순 정렬
             // 3. 문자열로 다시 합침
             .map(String::valueOf)
             .collect(Collectors.joining());
