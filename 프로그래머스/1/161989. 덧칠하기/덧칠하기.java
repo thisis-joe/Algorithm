@@ -1,15 +1,13 @@
 class Solution {
     public int solution(int n, int m, int[] section) {
-        boolean[] painted=new boolean[n+1]; //페인트칠한 부분 (0번 idx 사용X) (section처럼 1번 부터 사용)
-        int count=0; //칠한 횟수
-        
-        for(int i=0;i<section.length;i++){
-            if(painted[section[i]] ) continue; //이미 페인트 되었으면 다음 section으로 넘어감.
-            else{
-                count++;
-                for(int p=section[i];p<section[i]+m && p<=n ;p++){ // 현위치 ~ 현위치 +m 색칠
-                    painted[p]=true;
-                }
+        int count = 0;         // 페인트 칠 횟수
+        int lastPainted = 0;   // 마지막으로 페인트 칠된 구역
+
+        for (int sec : section) {
+            // 현재 구역이 마지막으로 칠해진 범위를 벗어나면 페인트 칠 필요
+            if (sec > lastPainted) {
+                count++;                 // 페인트 칠 횟수 증가
+                lastPainted = sec + m - 1; // 롤러로 덮을 수 있는 범위 업데이트
             }
         }
         return count;
