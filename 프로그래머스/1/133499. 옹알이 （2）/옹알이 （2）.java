@@ -8,11 +8,11 @@ class Solution {
                 continue;
             }
 
-            babblings[i] = babblings[i].replace("aya", " ");
-            babblings[i] = babblings[i].replace("ye", " ");
-            babblings[i] = babblings[i].replace("woo", " ");
-            babblings[i] = babblings[i].replace("ma", " ");
-            babblings[i] = babblings[i].replace(" ", "");
+            babblings[i] = babblings[i].replaceAll("aya", " ");
+            babblings[i] = babblings[i].replaceAll("ye", " ");
+            babblings[i] = babblings[i].replaceAll("woo", " ");
+            babblings[i] = babblings[i].replaceAll("ma", " ");
+            babblings[i] = babblings[i].replaceAll(" ", "");
 
             if(babblings[i].length()  == 0) answer++;
 
