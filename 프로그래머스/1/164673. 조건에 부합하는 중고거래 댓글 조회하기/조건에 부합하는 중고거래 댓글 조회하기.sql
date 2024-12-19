@@ -1,5 +1,19 @@
+-- USED_GOODS_BOARD 
+-- BOARD_ID, WRITER_ID, TITLE, CONTENTS, PRICE, CREATED_DATE, STATUS, VIEWS
+-- 게시글 ID, 작성자 ID, 게시글 제목, 게시글 내용, 가격, 작성일, 거래상태, 조회수를 의미합니다
+
+-- USED_GOODS_REPLY
+-- REPLY_ID, BOARD_ID, WRITER_ID, CONTENTS, CREATED_DATE
+-- 댓글 ID, 게시글 ID, 작성자 ID, 댓글 내용, 작성일
+
+-- 2022년 10월에 작성된 게시글 제목, 게시글 ID, 댓글 ID, 댓글 작성자 ID, 댓글 내용, 댓글 작성일을 조회하는 SQL문
+
 SELECT 
-    A.TITLE, A.BOARD_ID, B.REPLY_ID, B.WRITER_ID, B.CONTENTS, 
+    A.TITLE, 
+    A.BOARD_ID, 
+    B.REPLY_ID, 
+    B.WRITER_ID, 
+    B.CONTENTS, 
     TO_CHAR(B.CREATED_DATE,'YYYY-MM-DD') AS CREATED_DATE
 FROM USED_GOODS_BOARD A
 JOIN USED_GOODS_REPLY B
