@@ -2,17 +2,13 @@ import java.util.*;
 
 public class Solution {
     public int[] solution(int []arr) {
-        Stack<Integer> myStack = new Stack<>();
-        for(int ele : arr){
-            if(myStack.isEmpty() || myStack.peek()!=ele){
-                myStack.push(ele);
-            }
-            else{
-                continue;
-            }
+        Stack<Integer> stk = new Stack<>();
+        stk.push(arr[0]);
+        for(int i=1;i<arr.length;i++){
+            if(stk.peek()==arr[i])continue;
+            else stk.push(arr[i]);
         }
-        
-        //스택 to int[]
-        return myStack.stream().mapToInt(i->i).toArray();
+            
+        return stk.stream().mapToInt(i->i).toArray();
     }
 }
