@@ -2,16 +2,19 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] array, int[][] commands) {
-        List<Integer> resList = new ArrayList<>();
-        for(int[] cmd : commands){
-            List<Integer> intList = new ArrayList<>();
-            for(int i=cmd[0]-1;i<=cmd[1]-1;i++){
-                intList.add(array[i]);
+        int[] answer = new int[commands.length];
+        
+        for(int i = 0 ; i < commands.length ; i++){
+            ArrayList<Integer> intList = new ArrayList<>();    
+            for(int j = commands[i][0]-1 ; j <= commands[i][1]-1 ; j++){
+                intList.add(array[j]);
             }
-            int[] temp = intList.stream().mapToInt(i->i).toArray();
-            Arrays.sort(temp);
-            resList.add(temp[cmd[2]-1]);
+            int[] arr = intList.stream().mapToInt(a->a).toArray();
+
+            Arrays.sort(arr);
+            answer[i] = arr[commands[i][2]-1];
         }
-        return resList.stream().mapToInt(i->i).toArray();
+        
+        return answer;
     }
 }
