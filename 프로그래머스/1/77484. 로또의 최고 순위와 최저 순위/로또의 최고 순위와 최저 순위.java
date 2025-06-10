@@ -1,74 +1,48 @@
 import java.util.*;
+
 class Solution {
     public int[] solution(int[] lottos, int[] win_nums) {
-        int[] whatIf = new int[2];
-        //중복은 없으므로 Set으로 진행해보자. Set에도 contains같은게 있었던가? 없으면 반복문 돌아야지 뭐
-        Set<Integer> lottoSet = new HashSet<>();
-        int cntZero = 0;
-        int cntSame = 0;
+        //내 로또번호, 당첨번호를 각각 다른 set에 넣는다
+        //contain-> 일치개수 +1 
+        //0의 개수는 따로 세고, 모두 틀릴경우(+0) & 모두 같은 경우(+0의개수) = 정답
         
-        //Set에 값 넣기
-        for(int num : lottos) {lottoSet.add(num); if(num==0) cntZero++;}
+        int[] result = new int[2];
+        //Set<Integer> lottosSet = new HashSet<>();
+        Set<Integer> win_sumsSet = new HashSet<>();
+        int zeroCnt = 0 ;
+        int sameCnt = 0;
+        int maxRankCnt = 0;
         
-        //일치 확인
-        for(int num : win_nums){
-            if(lottoSet.contains(num)) cntSame++;
+        for(int n : win_nums){
+            win_sumsSet.add(n);
         }
         
-        int best = cntSame+cntZero;
+        for(int n : lottos){
+            if(n==0) zeroCnt++;
+            if(win_sumsSet.contains(n)) sameCnt++;
+        }
+        maxRankCnt = sameCnt + zeroCnt;
+            
+        switch(sameCnt){
+            case 6: result[1] = 1; break;
+            case 5: result[1] = 2; break;
+            case 4: result[1] = 3; break;
+            case 3: result[1] = 4; break;
+            case 2: result[1] = 5; break;
+            default : result[1] = 6; break;
+        }
         
-        whatIf[0] = best == 6 ? 1 : 
-                    best == 5 ? 2 : 
-                    best == 4 ? 3 : 
-                    best == 3 ? 4 :
-                    best == 2 ? 5 : 
-                    6;
+        switch(maxRankCnt){
+            case 6: result[0] = 1; break;
+            case 5: result[0] = 2; break;
+            case 4: result[0] = 3; break;
+            case 3: result[0] = 4; break;
+            case 2: result[0] = 5; break;
+            default : result[0] = 6; break;
+        }
         
-        whatIf[1] = cntSame == 6 ? 1 : 
-                    cntSame == 5 ? 2 : 
-                    cntSame == 4 ? 3 : 
-                    cntSame == 3 ? 4 :
-                    cntSame == 2 ? 5 : 
-                    6;
         
-        return whatIf;
+        
+        return result;
     }
 }
-
-
-/*
-int countZero = 0;
-        String lottosStr = "";
-        
-        for(int num : lottos) {
-            lottosStr += num+"  ";
-            if(num==0) countZero++;
-        }
-        for(int num : win_nums){
-            if(lottosStr.contains(num+"")){
-                lottosStr = lottosStr.replace(num+"  ","S  ");
-            }
-        }
-        
-        System.out.println(lottosStr);
-        String[] strArr = lottosStr.split("  ");
-        List<String> strList = new ArrayList<>();
-        for(String str : strArr) strList.add(str);
-        
-        int sameNumCnt = Collections.frequency(strList,"S");
-        int zeroGoSame = sameNumCnt+countZero;
-        
-        whatIf[0] = zeroGoSame == 6 ? 1 : 
-                    zeroGoSame == 5 ? 2 : 
-                    zeroGoSame == 4 ? 3 : 
-                    zeroGoSame == 3 ? 4 :
-                    zeroGoSame == 2 ? 5 : 
-                    6;
-        
-        whatIf[1] = sameNumCnt == 6 ? 1 : 
-                    sameNumCnt == 5 ? 2 : 
-                    sameNumCnt == 4 ? 3 : 
-                    sameNumCnt == 3 ? 4 :
-                    sameNumCnt == 2 ? 5 : 
-                    6;
-*/
