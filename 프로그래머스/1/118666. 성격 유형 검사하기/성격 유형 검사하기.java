@@ -1,36 +1,31 @@
 import java.util.*;
+
 class Solution {
     public String solution(String[] survey, int[] choices) {
-        StringBuilder sb = new StringBuilder();
-        Map<Character,Integer> map = new HashMap<>();
-        map.put('R',0); map.put('T',0);
-        map.put('C',0); map.put('F',0);
-        map.put('J',0); map.put('M',0);
-        map.put('A',0); map.put('N',0);
         
-        for(int i=0;i<survey.length;i++){
-            char left = survey[i].charAt(0);
-            char right = survey[i].charAt(1);
-            int leftScore = 4-choices[i];
-            int rightScore = choices[i]-4;
-                
-            if(choices[i]==4) {
-                continue;
-            }
-            else if(choices[i]<4){
-                map.put(left, map.get(left)+leftScore);
-            }
+        Map<Character,Integer> score = new HashMap<>(); // -> 이걸 배열로하고싶은데 
+        score.put('R',0); score.put('T',0);
+        score.put('C',0); score.put('F',0);
+        score.put('J',0); score.put('M',0);
+        score.put('A',0); score.put('N',0);
+        
+        int[] choiceScore = new int[]{3,2,1,0,1,2,3};
+        for(int i = 0 ; i < survey.length; i++){
+            if(choices[i] == 4) continue;
             else{
-                map.put(right, map.get(right)+rightScore);   
+                int idx = choices[i] < 4 ? 0 : 1;
+                score.put(survey[i].charAt(idx),
+                            score.get(survey[i].charAt(idx)) + choiceScore[choices[i]-1]);
             }
         }
         
-        sb.append( map.get('R') >= map.get('T') ? 'R' : 'T' );
-        sb.append( map.get('C') >= map.get('F') ? 'C' : 'F' );
-        sb.append( map.get('J') >= map.get('M') ? 'J' : 'M' );
-        sb.append( map.get('A') >= map.get('N') ? 'A' : 'N' );
+        char[] answer = new char[4];
+        answer[0] = score.get('R') >= score.get('T') ? 'R' : 'T';
+        answer[1] = score.get('C') >= score.get('F') ? 'C' : 'F';
+        answer[2] = score.get('J') >= score.get('M') ? 'J' : 'M';
+        answer[3] = score.get('A') >= score.get('N') ? 'A' : 'N';
+    
+        return new String(answer);
         
-        
-        return sb.toString();
-    }   
+    }
 }
