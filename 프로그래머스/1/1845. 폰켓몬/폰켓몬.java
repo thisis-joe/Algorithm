@@ -2,14 +2,20 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] nums) {
-        int num = nums.length/2;
-        int cnt = 0;
+        int answer = 0;
+        Set<Integer> set = new HashSet<>();
+        int len = nums.length;
         
-        Set<Integer> intSet = new HashSet<>();
-        for(int i : nums){
-            intSet.add(i);
+        for(int n : nums){
+            set.add(n);
+        }
+        if(len/2 < set.size()) {
+            return len/2;
+        }
+        else{
+            return set.size();
         }
         
-        return intSet.size() >= num ? num : intSet.size();
+        
     }
 }
