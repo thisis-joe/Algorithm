@@ -9,13 +9,8 @@ class Solution {
         for(int n : nums){
             set.add(n);
         }
-        if(len/2 < set.size()) {
-            return len/2;
-        }
-        else{
-            return set.size();
-        }
         
+        return len/2 < set.size()? len/2 : set.size();
         
     }
 }
