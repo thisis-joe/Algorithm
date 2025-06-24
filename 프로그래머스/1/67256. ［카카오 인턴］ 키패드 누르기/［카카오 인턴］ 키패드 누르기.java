@@ -15,11 +15,13 @@ class Solution {
             else if(num == 3 || num == 6 || num == 9){
                 answer += "R";
                 RPos[0] = pos[num][0];
-                RPos[1] = pos[num][1]; //오타 !!
+                RPos[1] = pos[num][1]; //오타 주의
             }
             else{ //2 5 8 0
                 int LtoNum = getDistance(LPos,pos[num]);
                 int RtoNum = getDistance(RPos,pos[num]);
+                //double LtoNum = getDistance(LPos,pos[num]);
+                //double RtoNum = getDistance(RPos,pos[num]);
                 if(LtoNum < RtoNum){ //왼쪽 손가락과 더 가까움
                     answer += "L";
                     LPos[0] = pos[num][0];
