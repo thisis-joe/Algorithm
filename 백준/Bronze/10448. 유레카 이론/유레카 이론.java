@@ -1,36 +1,36 @@
 import java.util.*;
 
 public class Main {
-    static List<Integer> triangleNumbers = new ArrayList<>();
-
+    //삼각수
+    static int[] Tarr = new int[51];
+    
     public static void main(String[] args) {
+        //삼각수 저장
+        for(int i = 1 ; i <= 50 ; i++){
+            Tarr[i] = i*(i+1)/2; 
+        } 
+        
+        //입력
         Scanner sc = new Scanner(System.in);
-
-        // 삼각수 미리 구하기 (최대 1000까지)
-        for (int n = 1; n * (n + 1) / 2 <= 1000; n++) {
-            triangleNumbers.add(n * (n + 1) / 2);
-        }
-
-        int T = sc.nextInt();
-        while (T-- > 0) {
-            int K = sc.nextInt();
-            boolean found = false;
-
-            for (int i = 0; i < triangleNumbers.size(); i++) {
-                for (int j = 0; j < triangleNumbers.size(); j++) {
-                    for (int k = 0; k < triangleNumbers.size(); k++) {
-                        int sum = triangleNumbers.get(i) + triangleNumbers.get(j) + triangleNumbers.get(k);
-                        if (sum == K) {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (found) break;
-                }
-                if (found) break;
-            }
-
-            System.out.println(found ? 1 : 0);
+        int N = sc.nextInt();
+        
+        //입력 및 삼각수 판단
+        for(int i = 0 ; i < N ; i++){
+            int num = sc.nextInt();
+            if(is3TriNum(num)) System.out.println(1);
+            else System.out.println(0);
         }
     }
+    
+    public static boolean is3TriNum(int num){
+        for(int i = 1 ; i < 50; i++){
+            for(int j = 1 ; j < 50 ; j++){
+                for(int k = 1; k < 50; k++){
+                    if(Tarr[i]+Tarr[j]+Tarr[k] == num) return true;
+                }
+            }
+        }
+        return false;
+    }
 }
+
