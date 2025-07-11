@@ -1,17 +1,20 @@
 class Solution {
     public int solution(int num) {
+        int count = 0;
         long n = num;
-        if(n==1) return 0;
-        
-        for(int i=0;i<500;i++){
-            if(n==1) return i;
+        while(n != 1){
+            if(count >= 500) return -1;
             if(n%2==0){
-                n/=2;   
+                n /= 2;
+                count++;
+                continue;
             }else{
-                n=n*3+1;
+                n = n*3 +1;
+                count++;
+                continue;
             }
         }
         
-        return -1;
+        return count;
     }
 }
