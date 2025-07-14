@@ -1,30 +1,20 @@
 import java.util.*;
 
-public class Main
-{
-	public static void main(String[] args) {
-        Map<Integer,Integer> map = new HashMap<>();
-        map.put(1,1); map.put(2,2); map.put(3,3); //컵번호 - 컵위치
-        
+public class Main {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        
-        for(int i = 0; i < N; i++){
-            int A = sc.nextInt();
-            int B = sc.nextInt();
-            
-            int tmp = map.get(A);
-            map.put(A,map.get(B));
-            map.put(B,tmp);
+        int n = sc.nextInt();  // 교환 횟수
+        int pos = 1; // 공의 시작 위치는 1번 컵
+
+        for (int i = 0; i < n; i++) {
+            int a = sc.nextInt();
+            int b = sc.nextInt();
+
+            // 만약 현재 공이 a 또는 b에 있다면, 바꿔줘야 함
+            if (pos == a) pos = b;
+            else if (pos == b) pos = a;
         }
-        
-        for(Integer cup : map.keySet()){
-            if(map.get(cup)==1) {
-                System.out.println(cup); 
-                return;
-            }
-        }
-        
-        System.out.println(-1);
-	}
+
+        System.out.println(pos);
+    }
 }
