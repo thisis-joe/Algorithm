@@ -1,28 +1,42 @@
 import java.util.*;
 
 public class Main {
+    static int N;
+    static int[] T, P;
+    static int maxProfit = 0;
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        int[] Ti = new int[N+1];
-        int[] Pi = new int[N+1];
-        int[] dp = new int[N+2]; // N+1일까지 가능하게
+        N = sc.nextInt();
+        T = new int[N + 1];
+        P = new int[N + 1];
 
         for (int i = 1; i <= N; i++) {
-            Ti[i] = sc.nextInt();
-            Pi[i] = sc.nextInt();
+            T[i] = sc.nextInt();
+            P[i] = sc.nextInt();
         }
 
-        // 역순으로 진행
-        for (int i = N; i >= 1; i--) {
-            int endDay = i + Ti[i] - 1;
-            if (endDay <= N) {
-                dp[i] = Math.max(Pi[i] + dp[i + Ti[i]], dp[i + 1]); // 상담함 vs 안 함
-            } else {
-                dp[i] = dp[i + 1]; // 상담 못함
-            }
+        dfs(1, 0);
+
+        System.out.println(maxProfit);
+    }
+
+    static void dfs(int day, int sum) {
+        // 퇴사일을 넘긴 경우 종료
+        if (day > N + 1) return;
+
+        // 정확히 퇴사일 도달 시 최대 이익 갱신
+        if (day == N + 1) {
+            maxProfit = Math.max(maxProfit, sum);
+            return;
         }
 
-        System.out.println(dp[1]); // 1일부터 시작한 최대 이익
+        // 1. 현재 상담을 한다면 (Ti[day]일 걸림)
+        if (day + T[day] <= N + 1) {
+            dfs(day + T[day], sum + P[day]);
+        }
+
+        // 2. 현재 상담을 안 하고 다음 날로 넘어감
+        dfs(day + 1, sum);
     }
 }
