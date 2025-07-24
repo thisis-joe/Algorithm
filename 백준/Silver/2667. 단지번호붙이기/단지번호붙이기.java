@@ -54,8 +54,7 @@ public class Main
 	        int nx = x + dx[i];
 	        
 	        if(ny >= 0 && nx >= 0 && ny < N && nx < N
-	            && !visited[ny][nx] && field[ny][nx]   //여기를 ny로 해야한다 . 실수
-	            ){
+	            && !visited[ny][nx] && field[ny][nx] ){ //여기를 ny로 해야한다 . 실수
 	                count += dfs(ny,nx);
 	            }
 	    }
