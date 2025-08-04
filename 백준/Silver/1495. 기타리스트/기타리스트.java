@@ -5,66 +5,54 @@ public class Main
     static int N;
     static int S;
     static int M;
-    static int[] vol;
-    static List<Integer>[] graph;
-    static int max = -1;
+    static int[] V;
+    static Set<Integer>[] sets;
     
 	public static void main(String[] args) {
+        //외부입력
         Scanner sc = new Scanner(System.in);
-        
         N = sc.nextInt();
         S = sc.nextInt();
         M = sc.nextInt();
-        vol = new int[N];
-        graph = new ArrayList[N+1];
+        V = new int[N];
         
+        //0번째 초기화
+        sets = new HashSet[N+1]; 
+        sets[0] = new HashSet<>();
+        sets[0].add(S);
         
-        
+        //로직
         for(int i = 0 ; i < N ; i++){
-            vol[i] = sc.nextInt();
+            V[i] = sc.nextInt();
+            sets[i+1] = new HashSet<>();//i+1
         }
         
-        for(int i = 0 ; i < N+1 ; i++){
-            graph[i] = new ArrayList<>();
-        }
-        
-        graph[0].add(S);
-        
         for(int i = 0 ; i < N ; i++){
-            for(int j = 0 ; j < graph[i].size() ; j++){
-                int lowerVol = graph[i].get(j) - vol[i];
-                int upperVol = graph[i].get(j) + vol[i];
+            for(Integer ele : sets[i]){
+                int low = ele - V[i];
+                int high = ele + V[i];    
                 
-                // if(lowerVol < 0 && upperVol > M){
-                //     System.out.println(max);
-                //     return;
-                // }
-                // -> 이는 한 노드에서만 판단하는 조건이므로, 다른 노드에서는 경로가 있을 수 있음에도 불구하고 중간에 탐색을 종료해버림.
-                
-                if(lowerVol >= 0 && !graph[i+1].contains(lowerVol)) {
-                    graph[i+1].add(lowerVol);   
+                if(low >= 0){
+                    sets[i+1].add(low);
                 }
-                if(upperVol <= M && !graph[i+1].contains(upperVol)) {
-                    graph[i+1].add(upperVol);   
+                if(high <= M){
+                    sets[i+1].add(high);
                 }
             }
             
+            if(sets[i+1].isEmpty()){ //이번 low high에서 모두 불가능했다면 sets[i]는 비어있다
+                System.out.println(-1);
+                return;
+            }
         }
         
-        if(graph[N].isEmpty()){ //마지막 depth가 비어있다면, 가능한 경우가 없다는 의미.
-            System.out.println(-1);
-            
+        int max = Integer.MIN_VALUE;
+        for(Integer ele : sets[N]){
+            if(max < ele){
+                max = ele;
+            }
         }
-        else{
-            for(int i = 0; i < graph[N].size() ; i++){
-                int node = graph[N].get(i);
-                if(max < node){
-                    max = node;
-                } 
-            }    
-            System.out.println(max);
-        }
-        
+        System.out.println(max);
         return;
 	}
 }
