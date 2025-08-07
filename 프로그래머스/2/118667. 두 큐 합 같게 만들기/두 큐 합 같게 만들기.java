@@ -1,52 +1,51 @@
 import java.util.*;
 
 class Solution {
-    static long sum1, sum2;
-    static long target;
-    static int cnt;
-    static Queue<Integer> q1 = new LinkedList<>();
-    static Queue<Integer> q2 = new LinkedList<>();
-        
     public int solution(int[] queue1, int[] queue2) {
-        int len = queue1.length;
-        int limit = 3*len;
-        //초기화
-        for(int n : queue1) {
-            q1.offer(n);
+        Queue<Integer> q1 = new LinkedList<>();
+        Queue<Integer> q2 = new LinkedList<>();
+
+        long sum1 = 0;
+        long sum2 = 0;
+        long target = 0;
+        for(int n : queue1){
             sum1 += n;
+            q1.offer(n);
         }
         for(int n : queue2){
+            sum2 += n;
             q2.offer(n);
-            sum2 += n;            
-        } 
+        }
         
-        //합이 홀수면 어떤 방법으로도 같게 만들 수 없고, 짝수인경우 target /=2
-        target = sum1 + sum2;
-        if(target % 2 != 0){
+        if((sum1 + sum2) % 2 != 0){
             return -1;
         }else{
-            target /= 2;
+            target = (sum1 + sum2) / 2;
         }
         
-        //큐 이동
-        while(cnt < 3*len){
-            if(sum1 == target) return cnt;
-            if(sum1 > target){ //q1합 > q2합  이므로 q1 -> q2로 이동
-                int val = q1.poll();
-                sum1 -= val;
-                sum2 += val;
-                q2.offer(val);
-                
-            }else if(sum1 < target){
-                int val = q2.poll();
-                sum1 += val;
-                sum2 -= val;
-                q1.offer(val);
+        int count = 0;
+        int maxMove = 3 * q1.size(); 
+        while(count < maxMove){
+            if(sum1 < sum2){
+                Integer val = q2.poll(); //null체크를 위해 Integer로 사용
+                if(val != null) {
+                    q1.offer(val);
+                    sum1 += val;
+                    sum2 -= val;
+                }
+            }else if(sum1 > sum2){
+                Integer val = q1.poll();
+                if(val != null){
+                    q2.offer(val);
+                    sum1 -= val;
+                    sum2 += val;
+                }
+            }else{
+                return count;
             }
-            cnt++;
+            count++;
         }
         
-            
         return -1;
     }
 }
