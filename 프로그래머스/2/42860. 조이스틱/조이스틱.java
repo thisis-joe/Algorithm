@@ -1,24 +1,28 @@
 class Solution {
     public int solution(String name) {
-        
-        //상하이동
-        int upDown = 0;
-        for(char c : name.toCharArray()){
-            upDown += Math.min(c-'A','Z'-c+1); //위로, 아래로 중 작은 값 
-        }
-        
-        //그냥 오른쪽 쭉 가는 경우, 돌아가는 경우(2) 3가지 경우에 대해 비교
-        int leftRight = name.length()-1;
-        for (int i = 0; i < name.length(); i++) {
-            int next = i + 1;
-            while (next < name.length() && name.charAt(next) == 'A') { // 다음 문자가 'A'인 경우, 끝까지 연속된 A를 찾음
-                next++;
-            }
-            // i에서 되돌아가서 뒤쪽 처리하는 경우, 반대로 뒤에서 먼저 처리하고 오는 경우 중 작은 값
-            leftRight = Math.min(leftRight,
-                                 Math.min(i * 2 + name.length() - next, (name.length() - next) * 2 + i));
+        int len = name.length();
+        int answer = 0;
+
+        // 1. 상/하 이동 계산
+        for (int i = 0; i < len; i++) {
+            char c = name.charAt(i);
+            answer += Math.min(c - 'A', 'Z' - c + 1);
         }
 
-        return upDown + leftRight;
+        // 2. 좌/우 이동 최적화
+        int move = len - 1; // 그냥 오른쪽으로 쭉 가는 경우
+        for (int i = 0; i < len; i++) {
+            int next = i + 1;
+            // 다음 문자가 'A'인 경우, 끝까지 연속된 A를 찾음
+            while (next < len && name.charAt(next) == 'A') {
+                next++;
+            }
+            // i에서 되돌아가서 뒤쪽 처리하는 경우와 비교
+            move = Math.min(move, i * 2 + len - next);
+            // 반대로 뒤에서 먼저 처리하고 오는 경우
+            move = Math.min(move, (len - next) * 2 + i);
+        }
+
+        return answer + move;
     }
 }
