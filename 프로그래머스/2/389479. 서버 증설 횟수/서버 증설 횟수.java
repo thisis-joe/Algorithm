@@ -1,32 +1,39 @@
 import java.util.*;
-
 class Solution {
     public int solution(int[] players, int m, int k) {
-        int[][] server = new int[2][24];
-        Arrays.fill(server[0], 0); // 현재 서버 대수
-        Arrays.fill(server[1], 0); // 누적 증설 횟수
-
-        for (int i = 0; i < 24; i++) {
-            int nowNeed = players[i] / m; // 현재 필요한 서버 수
-            int nowCom = server[0][i];    // 현재 가동 중인 서버 수
-
-            if (nowNeed > nowCom) { // 증설이 필요한 경우
-                int upgrade = nowNeed - nowCom;
-                server[1][i] = (i == 0) ? nowNeed : server[1][i - 1] + upgrade;
-
-                // 증설된 서버를 k시간 동안 유지
-                for (int j = i; j < i + k; j++) {
-                    if (j <= 23) {
-                        server[0][j] += upgrade;
-                    } else {
-                        break;
+        int addCount = 0;
+        Map<String,Integer> serverManage = new HashMap<>(); //서버 각자에 대한 시간저장과 갱신이 필요
+        
+        for(int time = 0 ; time < 24 ; time++){
+            // Iterator<String> keys = serverManage.keySet().iterator(); //순회하면서 삭제 필요 - forEach 부적합
+            // while(keys.hasNext()){
+            //     String key = keys.next();
+            //     if(time - serverManage.get(key) > k){
+            //         serverManage.remove(key);
+            //     }
+            // }
+            // 1) 만료 제거: 시작시간 + k <= 현재시간 이면 만료
+            Iterator<Map.Entry<String, Integer>> it = serverManage.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, Integer> e = it.next();
+                if (time - e.getValue() >= k) { // <-- 핵심: >= k
+                    it.remove();               // <-- 핵심: iterator.remove()
+                }
+            }
+            
+            int n = players[time];
+            int curServer = serverManage.size();
+            if(n * m > curServer * m){ //증설 필요
+                int needServer = n / m ; //몇대 서버가 필요
+                if(curServer < needServer){ //서버 증설이 필요
+                    for(int i = 0; i < needServer - curServer; i++){
+                        serverManage.put(time+"-"+i, time);
+                        addCount++;
                     }
                 }
-            } else { // 증설이 필요 없는 경우
-                server[1][i] = (i == 0) ? nowNeed : server[1][i - 1];
             }
         }
-
-        return server[1][23]; // 마지막 시간(23시)까지의 누적 증설 횟수 반환
+        
+        return addCount;
     }
 }
