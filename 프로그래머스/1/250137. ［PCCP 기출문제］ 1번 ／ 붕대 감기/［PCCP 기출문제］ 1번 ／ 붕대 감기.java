@@ -1,44 +1,30 @@
 class Solution {
-    
     public int solution(int[] bandage, int health, int[][] attacks) {
         int hp = health;
-        int bandDone = bandage[0];
-        int band1sec = bandage[1];
-        int bandOver = bandage[2];
-        int bandCount = 0;
-        int endTime = attacks[attacks.length-1][0];
-        for(int time = 0 ; time <= endTime; time++){
+        int seq = 0;
+        int lastTime = attacks[attacks.length-1][0];
+        
+        for(int time = 1; time <= lastTime ; time ++){
+            
+            //공격 받는 시간인지 확인
             boolean isAttack = false;
-            
-            //해당 공격 시각에서 공격.
-            for(int[] attack : attacks){
-                if(attack[0] == time){
-                    bandCount = 0; // 공격을 받으면 연속 붕대감기 초기화
-                    isAttack = true; // 공격시간에 붕대를 감지 못하도록 공격중임을 명시
-                    if(hp - attack[1] <= 0) {
-                        return -1; // 이번 공격에서 사망
-                    }
-                    else {
-                        hp -= attack[1];
-                        break; 
-                    }
-                }
-            }   
-            
-            //공격시간에는 붕대를 감지 못함.
-            //죽지 않으면 1초마다 붕대는 감고있다.
-            if(isAttack == false){
-                bandCount++;
-                if(bandCount == bandDone){
-                    bandCount = 0;
-                    int heal = band1sec + bandOver;
-                    hp = hp + heal <= health ? hp + heal : health;
-                }else{
-                    int heal = band1sec;
-                    hp = hp + heal <= health ? hp + heal : health;
+            for(int[] attack : attacks){ //조금 비효율적?
+                if(time == attack[0]){
+                    hp -= attack[1];
+                    seq = 0;
+                    if(hp <= 0) return -1;
+                    else isAttack = true;
                 }
             }
+            if(isAttack) continue; //공격 받았다면 붕대감기 진행하지 않음
             
+            //붕대감기
+            hp = hp + bandage[1] >= health ? health : hp + bandage[1];   //초당회복
+            seq++;              //연속시간 증가
+            if(seq == bandage[0]){
+                hp = hp + bandage[2] >= health ? health : hp + bandage[2];
+                seq = 0;
+            }
         }
         
         return hp;
