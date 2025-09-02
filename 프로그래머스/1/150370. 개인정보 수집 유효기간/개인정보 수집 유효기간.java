@@ -1,42 +1,43 @@
 import java.util.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 class Solution {
     public int[] solution(String today, String[] terms, String[] privacies) {
-        //오늘 날짜로 파기해야 할 개인정보 번호들을 구하기
-        List<Integer> result = new ArrayList<>();
-        Map<String, Integer> term = new HashMap<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd"); //mm은 분을 의미
         
-        LocalDate todayYMD = LocalDate.parse(today, formatter);
+        String todayDate[] = today.split("\\.");
+        int todayY = Integer.parseInt(todayDate[0]);
+        int todayM = Integer.parseInt(todayDate[1]);
+        int todayD = Integer.parseInt(todayDate[2]);
+        int todayDayValue = todayY * 12 * 28 + todayM * 28 + todayD;
         
-        
-        for(String str : terms){
-            String[] eachCase = str.split(" ");
-            term.put(eachCase[0], Integer.parseInt(eachCase[1]));
+        Map<String,Integer> termMap = new HashMap<>();
+        for(String t : terms){
+            String[] term = t.split(" ");
+            termMap.put(term[0],Integer.parseInt(term[1])*28);
         }
         
-        for(int i=0; i<privacies.length; i++){
-            String[] privacy = privacies[i].split(" ");
+        List<Integer> deleteList = new ArrayList<>();
+        int privacyNum = 1;
+        for(String p : privacies){
+            String[] privacy = p.split("\\.");
+            String[] privacyDT = privacy[2].split(" ");
             
-            if(term.containsKey(privacy[1])){
-                // 개인정보 수집 날짜를 LocalDate로 파싱
-                LocalDate privacyDate = LocalDate.parse(privacy[0], formatter);
-                // if(privacyDate.plusMonths(term.get(privacy[1])).isBefore(todayYMD)){
-                //     result.add(i+1);
-                // }
-                
-                // 유효기간을 더한 날짜 계산
-                LocalDate expirationDate = privacyDate.plusMonths(term.get(privacy[1]));
-                
-                // 오늘 날짜와 비교하여 파기해야 할 경우 추가
-                if (expirationDate.isBefore(todayYMD) || expirationDate.isEqual(todayYMD)) {
-                    result.add(i + 1);
-                }
+            int privacyY = Integer.parseInt(privacy[0]);
+            int privacyM = Integer.parseInt(privacy[1]);
+            int privacyD = Integer.parseInt(privacyDT[0]);
+            int privacyDayValue = privacyY * 12 * 28 + privacyM * 28 + privacyD;
+            String privacyT = privacyDT[1];
+            
+            
+            if(todayDayValue >= privacyDayValue + termMap.get(privacyT)){ //파기조건
+                deleteList.add(privacyNum);
+                privacyNum++;
+                continue;
+            }
+            else{
+                privacyNum++;
+                continue;
             }
         }
         
-        return result.stream().mapToInt(i->i).toArray();
+        return deleteList.stream().mapToInt(i->i).toArray();
     }
 }
