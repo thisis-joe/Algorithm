@@ -1,52 +1,57 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Solution {
+	static StringBuilder 	sb;
+	static StringTokenizer 	st;
+	static BufferedReader 	br;
+	static int 				TC;
 	
-	static int minPrice, prices[], plan[];
+	static int prices[], plans[], minPrice;
+	
 	public static void main(String[] args) throws NumberFormatException, IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	    int TC = Integer.parseInt(br.readLine());
+		sb = new StringBuilder();
+		br = new BufferedReader(new InputStreamReader(System.in));
+	    TC = Integer.parseInt(br.readLine());
 
 	    for (int tc = 1; tc <= TC; tc++) {
+	    	
+	    	st = new StringTokenizer(br.readLine()," ");
 	    	prices = new int[4];
-	    	plan = new int[12];
-
+	    	for(int i = 0 ; i < 4 ; i++) 	prices[i] = Integer.parseInt(st.nextToken());
+	    	
+	    	st = new StringTokenizer(br.readLine()," ");
+	    	plans = new int[12];
+	    	for(int i = 0 ; i < 12 ; i++)  	plans[i] = Integer.parseInt(st.nextToken());
+	    	
 	    	minPrice = Integer.MAX_VALUE;
-	    	
-	    	StringTokenizer stk = new StringTokenizer(br.readLine()," ");
-	    	for(int i = 0 ; i < 4 ; i++) 	prices[i] = Integer.parseInt(stk.nextToken());
-
-	    	stk = new StringTokenizer(br.readLine()," ");
-	    	for(int i = 0 ; i < 12 ; i++)  {
-	    		plan[i] = Integer.parseInt(stk.nextToken());
-	    	}	
-	    	
 	    	dfs(0,0);
 	    	
-	    	System.out.println("#"+tc+" "+Math.min(minPrice,prices[3]));
+	    	sb.append("#").append(tc).append(" ").append(Math.min(minPrice, prices[3])).append("\n");
 	    }
+	    System.out.println(sb);
+	    
+	    br.close();
 	}
-	
+	 
 	static void dfs(int month, int currentSum) {
-	    if (month >= 12) {
-	        minPrice = Math.min(minPrice, currentSum);
-	        return;
-	    }
-	    
-	    if (plan[month] == 0) {
-	        dfs(month + 1, currentSum);
-	    } else {
-	        dfs(month + 1, currentSum + (plan[month] * prices[0]));
-
-	        dfs(month + 1, currentSum + prices[1]);
-
-	        dfs(month + 3, currentSum + prices[2]);
-	    }
-	    
-		
+		//가지
+		if(minPrice<=currentSum) {
+			return;
+		}
+		//기저
+		if(month>=12) {
+			minPrice = Math.min(minPrice,currentSum);
+			return;
+		}
+		//유도
+		if(plans[month] == 0) {
+			dfs(month+1,currentSum);
+		}else {
+			dfs(month+1,currentSum+prices[0]*plans[month]);
+			dfs(month+1,currentSum+prices[1]);
+			dfs(month+3,currentSum+prices[2]);
+		}
 	}
 
 }
