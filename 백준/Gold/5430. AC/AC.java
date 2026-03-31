@@ -4,7 +4,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main{
+public class Main {
 	static int arr[];
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -29,7 +29,7 @@ public class Main{
                         left = !left;
                         break;
                     case 'D':
-                    	if(start>end) {  //D를 반복하다 보면 start > end가 되면 빈 상태
+                    	if(start>end) {  //빈 상태에서 Delete 시도시 에러
                     		sb.append("error\n");
                     		continue loop;
                     	}
@@ -42,11 +42,7 @@ public class Main{
                 }
             }
             
-            if(start > end + 1) {
-                // D를 과도하게 한 경우만 error
-                sb.append("error\n");
-            } else if(start > end) {
-                // 정상적으로 비어있는 경우
+           if(start > end) { // 정상적으로 비어있는 경우          
                 sb.append("[]\n");
             } else {
             	sb.append("[");
