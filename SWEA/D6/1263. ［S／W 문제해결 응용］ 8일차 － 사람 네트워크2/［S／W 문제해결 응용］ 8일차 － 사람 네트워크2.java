@@ -26,19 +26,18 @@ public class Solution {
 					c %= N;
 				}
 				int input = Integer.parseInt(st.nextToken());
-				dp[r][c] = input != 0 ? 1 : 0; 
+				dp[r][c] = r==c ? 0 : input == 1 ? 1 : INF; 
 				c++;
 			}
 			
 			//플로이드-워셜 dp 2차원 구현부
 			for(int k = 0 ; k < N ; k++) {
 				for(int r = 0 ; r < N ; r++) {
+					if(dp[r][k] == INF) continue;
+					
 					for(int c = 0 ; c < N ; c++) {
-						if(r==c) continue;
-						if(dp[r][k] > 0 && dp[k][c] > 0) { // 경유지 통해서 가는 경로가 존재
-							if(dp[r][c] == 0) dp[r][c] = dp[r][k] + dp[k][c]; //직접경로 없으면 경유지 통하게 해줌
-							else if(dp[r][c] > 1) dp[r][c] = Math.min(dp[r][c], dp[r][k] + dp[k][c]); //경유지 통해서 가는 길만 있으면 최신화 할건지 결정
-						}
+						if(dp[k][c] == INF || r==c) continue;
+						dp[r][c] = Math.min(dp[r][c], dp[r][k] + dp[k][c]);
 					}
 				}
 			}
