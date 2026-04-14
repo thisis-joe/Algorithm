@@ -1,9 +1,8 @@
 
-
 import java.util.*;
 import java.io.*;
 
-public class Solution {
+public class Solution{
 	static final int INF = Integer.MAX_VALUE;
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -43,12 +42,16 @@ public class Solution {
 			}
 			
 			//최소값 갱신
-			int cc[] = new int[N];
-			for(int r = 0 ; r < N ; r++) {	
-				cc[r] = Arrays.stream(dp[r]).sum();
+			int answer = INF;
+			for(int i = 0; i < N; i++) {
+				int sum = 0;
+				for(int j = 0; j < N; j++) {
+					sum += dp[i][j];
+				}
+				answer = Math.min(answer, sum);
 			}
-			
-			sb.append(Arrays.stream(cc).min().orElse(-88)+"\n");
+
+			sb.append(answer).append("\n");
 		}
 		bw.write(sb.toString());
 		bw.flush();
